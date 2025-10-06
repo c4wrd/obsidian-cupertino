@@ -2422,8 +2422,15 @@ body:not(.is-mobile) {
 }
 body:not(.is-mobile) .tree-item-self:hover {
   background-color: var(--nav-item-background-hover);
-  transform: translateX(2px) scale(1.005);
   will-change: transform, background-color;
+}
+body:not(.is-mobile) .tree-item-self:hover > .tree-item-inner {
+  transform: translateX(2px) scale(1.005);
+}
+body:not(.is-mobile) .nav-folder-title,
+body:not(.is-mobile) .nav-file-title {
+  position: relative;
+  transition: opacity 0.12s ease-in-out;
 }
 body:not(.is-mobile) .nav-folder-title:hover::before,
 body:not(.is-mobile) .nav-file-title:hover::before {
@@ -2452,9 +2459,14 @@ body:not(.is-mobile) .tree-item-self.is-active::after {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
   pointer-events: none;
 }
-body:not(.is-mobile) .tree-item-self.is-active:hover {
+body:not(.is-mobile) .tree-item-self.is-active:hover > .tree-item-inner {
   transform: translateX(2px) scale(1.005);
+}
+body:not(.is-mobile) .tree-item-self.is-active:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+body:not(.is-mobile) .tree-item-inner {
+  transition: transform 0.12s ease-in-out;
 }
 body:not(.is-mobile) .workspace-ribbon .side-dock-ribbon-action {
   height: 32px;
