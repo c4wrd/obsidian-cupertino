@@ -18,6 +18,9 @@
 .tree-item-self {
   align-items: center;
   margin-bottom: 0;
+  transition: all 0.12s ease-in-out;
+  border-radius: var(--radius-s);
+  position: relative;
 }
 .search-results-info .dropdown {
   box-shadow: none !important;
@@ -108,8 +111,85 @@ body:not(.is-mobile) {
     border-inline-start: none;
   }
 
+  /* Liquid Glass hover effects for navigation items */
+  .tree-item-self:hover {
+    background-color: var(--nav-item-background-hover);
+    transform: translateX(2px) scale(1.005);
+    will-change: transform, background-color;
+  }
+
+  .nav-folder-title:hover,
+  .nav-file-title:hover {
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-s);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.02) 100%);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.12s ease-in-out;
+    }
+  }
+
+  .tree-item-self:hover .nav-folder-title::before,
+  .tree-item-self:hover .nav-file-title::before {
+    opacity: 1;
+  }
+
+  .tree-item-self.is-active {
+    background-color: var(--nav-item-background-active);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-s);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+  }
+
+  .tree-item-self.is-active:hover {
+    transform: translateX(2px) scale(1.005);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  }
+
   .workspace-ribbon .side-dock-ribbon-action {
     height: 32px;
+  }
+
+  /* Theme-specific Liquid Glass effects */
+  &.theme-dark {
+    .tree-item-self:hover {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-folder-title:hover,
+    .nav-file-title:hover {
+      &::before {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%, rgba(0, 0, 0, 0.08) 100%);
+      }
+    }
+
+    .tree-item-self.is-active {
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+      &::after {
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+      }
+    }
+
+    .tree-item-self.is-active:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    }
+  }
+
+  &.theme-light {
+    .tree-item-self:hover {
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), inset 0 0.5px 0 rgba(255, 255, 255, 0.5);
+    }
   }
 }
 

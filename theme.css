@@ -18,6 +18,23 @@ settings:
         title: Disable sidebar tinting
         type: class-toggle
     -
+        id: liquid-glass-intensity
+        title: Liquid Glass intensity
+        description: Adjust the intensity of the Liquid Glass effects (blur, vibrancy, depth)
+        type: class-select
+        allowEmpty: false
+        default: liquid-glass-normal
+        options:
+            -
+                label: Subtle
+                value: liquid-glass-subtle
+            -
+                label: Normal
+                value: liquid-glass-normal
+            -
+                label: Enhanced
+                value: liquid-glass-enhanced
+    -
         id: windows-header
         title: On Windows
         type: heading
@@ -130,6 +147,10 @@ body {
   --blur-s: blur(4px) saturate(1.5) brightness(1.025);
   --blur-m: blur(8px) saturate(1.5) brightness(1.025);
   --blur-l: blur(16px) saturate(1.5) brightness(1.025);
+  --blur-xl: blur(24px) saturate(1.6) brightness(1.03);
+  --blur-progressive-s: blur(6px) saturate(1.5) brightness(1.025);
+  --blur-progressive-m: blur(12px) saturate(1.6) brightness(1.03);
+  --blur-progressive-l: blur(20px) saturate(1.7) brightness(1.035);
   --caret-color: var(--text-accent);
   --callout-border-width: var(--border-width);
   --callout-padding: 16px;
@@ -273,9 +294,13 @@ body.theme-light {
   --code-value: #a626a4;
   --shadow-base: inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(255, 255, 255, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.025);
   --shadow-border: 0 0 1px 0 rgba(0, 0, 0, 0.4);
+  --shadow-specular: inset 0.5px 0.5px 1.5px rgba(255, 255, 255, 0.8), inset -0.5px -0.5px 1.5px rgba(255, 255, 255, 0.6);
+  --shadow-edge-light: inset 0 1px 0 0 rgba(255, 255, 255, 0.4), inset 1px 0 0 0 rgba(255, 255, 255, 0.3);
   --shadow-xs: var(--shadow-base), inset 0 -8px 48px rgba(0, 0, 0, 0.02), 0 1px 8px rgba(0, 0, 0, 0.025), 0 4px 48px rgba(0, 0, 0, 0.095);
   --shadow-s: var(--shadow-base), inset 0 0 1px 1px white, var(--shadow-border), 0 8px 15px 0 rgba(0, 0, 0, 0.2);
   --shadow-l: var(--shadow-border), inset 0 0 1px 1px white, 0 18px 60px 0 rgba(0, 0, 0, 0.3);
+  --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+  --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 8px 32px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 body.theme-dark {
   --background-modifier-cover: rgba(0, 0, 0, 0.6);
@@ -314,9 +339,13 @@ body.theme-dark {
   --code-value: #c678de;
   --shadow-base: inset 1px 1.5px 1px -1px rgba(255, 255, 255, 0.2), inset -1px -1.5px 1px -1px rgba(255, 255, 255, 0.15), inset 0 4px 16px rgba(255, 255, 255, 0.025);
   --shadow-border: 0 0 1px 0 rgba(255, 255, 255, 0.3);
+  --shadow-specular: inset 0.5px 0.5px 1.5px rgba(255, 255, 255, 0.3), inset -0.5px -0.5px 1.5px rgba(255, 255, 255, 0.2);
+  --shadow-edge-light: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), inset 1px 0 0 0 rgba(255, 255, 255, 0.18);
   --shadow-xs: inset 0 8px 64px rgba(255, 255, 255, 0.125), var(--shadow-base);
   --shadow-s: var(--shadow-border), 0 0 1px rgba(255, 255, 255, 0.5), 0 0 1px 0 rgba(0, 0, 0, 0.4), 0 8px 15px 0 rgba(0, 0, 0, 0.2);
   --shadow-l: var(--shadow-border), 0 0 1px rgba(255, 255, 255, 0.5), 0 0 1px 0 rgba(0, 0, 0, 0.7), 0 18px 60px 0 rgba(0, 0, 0, 0.3);
+  --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
+  --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 body.is-fullscreen {
   --frame-left-space: 0px;
@@ -427,6 +456,55 @@ svg.svg-icon {
   fill: none !important;
 }
 
+body.liquid-glass-subtle {
+  --blur-progressive-s: blur(3px) saturate(1.3) brightness(1.015);
+  --blur-progressive-m: blur(8px) saturate(1.4) brightness(1.02);
+  --blur-progressive-l: blur(14px) saturate(1.5) brightness(1.025);
+}
+body.liquid-glass-subtle.theme-light {
+  --shadow-glass: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.3), var(--shadow-border), 0 2px 16px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-glass-hover: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.3), var(--shadow-border), 0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+body.liquid-glass-subtle.theme-dark {
+  --shadow-glass: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.2), var(--shadow-border), 0 2px 16px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-glass-hover: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.2), var(--shadow-border), 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+body.liquid-glass-enhanced {
+  --blur-progressive-s: blur(8px) saturate(1.7) brightness(1.035);
+  --blur-progressive-m: blur(16px) saturate(1.8) brightness(1.04);
+  --blur-progressive-l: blur(28px) saturate(2.0) brightness(1.05);
+}
+body.liquid-glass-enhanced.theme-light {
+  --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 6px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 12px 48px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+}
+body.liquid-glass-enhanced.theme-dark {
+  --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 6px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+  --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 12px 48px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  body {
+    --blur-s: none;
+    --blur-m: none;
+    --blur-l: none;
+    --blur-xl: none;
+    --blur-progressive-s: none;
+    --blur-progressive-m: none;
+    --blur-progressive-l: none;
+  }
+  body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off) .mod-sidedock {
+    background-color: var(--background-primary-alt) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 @keyframes fadeInUp {
   from {
     transform: translateY(16px);
@@ -491,9 +569,29 @@ body:not(.mod-windows:not(.windows-mode-off)):not(.is-android:not(.material-off)
 @starting-style {
   body:not(.mod-windows:not(.windows-mode-off)):not(.is-android:not(.material-off)) .modal {
     transform: scale(0.98);
+    filter: blur(2px);
   }
 }
 
+@keyframes glassFlexIn {
+  0% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes glassMorph {
+  0%, 100% {
+    border-radius: var(--clickable-icon-radius);
+  }
+  50% {
+    border-radius: calc(var(--clickable-icon-radius) * 0.8);
+  }
+}
 @starting-style {
   body.is-mobile .workspace-drawer.mod-left {
     transform: translateX(-100%);
@@ -526,8 +624,6 @@ body.is-mobile .suggestion-item[style*=transform]:not([style*="transition: trans
 
 body.is-phone {
   /* Prompt In*/
-  /* Prompt Out */
-  /* Keyboard Out */
 }
 body.is-phone .prompt {
   transition: var(--anim-duration-moderate) !important;
@@ -557,6 +653,9 @@ body.is-phone .prompt-input-container {
     opacity: 0;
   }
 }
+body.is-phone {
+  /* Prompt Out */
+}
 body.is-phone .prompt[style*="transform: translateY"] {
   opacity: 0;
 }
@@ -574,6 +673,9 @@ body.is-phone:not(.hide-cursor) .mobile-navbar {
 }
 body.is-phone:not(.hide-cursor) .mobile-toolbar {
   animation: fadeInUpLarge var(--anim-duration-slow) var(--anim-motion-cupertino);
+}
+body.is-phone {
+  /* Keyboard Out */
 }
 body.is-phone.keyboard-animating .mobile-toolbar-options-list {
   background-color: var(--background-primary);
@@ -1700,10 +1802,20 @@ body .modal-bg {
   background-color: transparent;
 }
 body .modal:not(.mod-sidebar-layout) {
-  backdrop-filter: var(--blur-m);
-  box-shadow: var(--shadow-s);
+  backdrop-filter: var(--blur-progressive-m);
+  box-shadow: var(--shadow-glass);
   min-width: 320px;
   gap: 8px;
+  position: relative;
+  will-change: transform, box-shadow;
+}
+body .modal:not(.mod-sidebar-layout)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--modal-radius);
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%, rgba(0, 0, 0, 0.04) 100%);
 }
 body .modal-button-container {
   justify-content: center;
@@ -1764,9 +1876,19 @@ body.is-mobile .modal-close-button::before {
   -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='19' height='19' fill='none' viewBox='0 0 19 19'%3e%3cg clip-path='url(%23a)'%3e%3cpath fill='black' d='M.303 18.291c.41.399 1.09.399 1.489 0l7.5-7.5 7.5 7.5c.398.399 1.09.41 1.488 0a1.061 1.061 0 0 0 0-1.476l-7.5-7.512 7.5-7.5c.398-.398.41-1.078 0-1.476-.41-.41-1.09-.41-1.489 0l-7.5 7.5-7.5-7.5c-.398-.41-1.09-.422-1.488 0a1.061 1.061 0 0 0 0 1.476l7.5 7.5-7.5 7.512c-.398.398-.41 1.078 0 1.476Z'/%3e%3c/g%3e%3cdefs%3e%3cclipPath id='a'%3e%3cpath fill='white' d='M0 0h18.935v18.595H0z'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e");
 }
 body.is-mobile .modal:not(.mod-sidebar-layout) {
-  backdrop-filter: var(--blur-s);
+  backdrop-filter: var(--blur-progressive-s);
   border-radius: var(--modal-radius);
   background-color: var(--modal-background) !important;
+  box-shadow: var(--shadow-glass);
+  position: relative;
+}
+body.is-mobile .modal:not(.mod-sidebar-layout)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--modal-radius);
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.06) 100%);
 }
 body.is-mobile .modal:not(.mod-sidebar-layout) .modal-header {
   border: none !important;
@@ -2191,6 +2313,9 @@ body.is-tablet .modal.mod-sidebar-layout .dropdown {
 .tree-item-self {
   align-items: center;
   margin-bottom: 0;
+  transition: all 0.12s ease-in-out;
+  border-radius: var(--radius-s);
+  position: relative;
 }
 
 .search-results-info .dropdown {
@@ -2202,10 +2327,6 @@ body.is-tablet .modal.mod-sidebar-layout .dropdown {
   color: var(--color-base-100);
 }
 
-body:not(.is-mobile) {
-  /* Panel actions style */
-  /* Hide indent line */
-}
 body:not(.is-mobile) .workspace-drop-overlay,
 body:not(.is-mobile) .workspace-ribbon {
   z-index: 11;
@@ -2251,6 +2372,9 @@ body:not(.is-mobile) .workspace-sidedock-vault-profile .workspace-drawer-vault-s
 body:not(.is-mobile) .workspace-drawer-vault-actions .clickable-icon:first-child {
   display: none;
 }
+body:not(.is-mobile) {
+  /* Panel actions style */
+}
 body:not(.is-mobile) .nav-buttons-container {
   border-radius: 100vh;
   background-color: var(--background-primary);
@@ -2269,12 +2393,76 @@ body:not(.is-mobile) .nav-action-button.is-active:hover {
   background-color: var(--interactive-normal);
   color: var(--icon-color);
 }
+body:not(.is-mobile) {
+  /* Hide indent line */
+}
 body:not(.is-mobile) .tree-item-children {
   margin-bottom: 0;
   border-inline-start: none;
 }
+body:not(.is-mobile) {
+  /* Liquid Glass hover effects for navigation items */
+}
+body:not(.is-mobile) .tree-item-self:hover {
+  background-color: var(--nav-item-background-hover);
+  transform: translateX(2px) scale(1.005);
+  will-change: transform, background-color;
+}
+body:not(.is-mobile) .nav-folder-title:hover::before,
+body:not(.is-mobile) .nav-file-title:hover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-s);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.02) 100%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease-in-out;
+}
+body:not(.is-mobile) .tree-item-self:hover .nav-folder-title::before,
+body:not(.is-mobile) .tree-item-self:hover .nav-file-title::before {
+  opacity: 1;
+}
+body:not(.is-mobile) .tree-item-self.is-active {
+  background-color: var(--nav-item-background-active);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+body:not(.is-mobile) .tree-item-self.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-s);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%);
+  pointer-events: none;
+}
+body:not(.is-mobile) .tree-item-self.is-active:hover {
+  transform: translateX(2px) scale(1.005);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
 body:not(.is-mobile) .workspace-ribbon .side-dock-ribbon-action {
   height: 32px;
+}
+body:not(.is-mobile) {
+  /* Theme-specific Liquid Glass effects */
+}
+body:not(.is-mobile).theme-dark .tree-item-self:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+}
+body:not(.is-mobile).theme-dark .nav-folder-title:hover::before,
+body:not(.is-mobile).theme-dark .nav-file-title:hover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%, rgba(0, 0, 0, 0.08) 100%);
+}
+body:not(.is-mobile).theme-dark .tree-item-self.is-active {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+body:not(.is-mobile).theme-dark .tree-item-self.is-active::after {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+}
+body:not(.is-mobile).theme-dark .tree-item-self.is-active:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+body:not(.is-mobile).theme-light .tree-item-self:hover {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), inset 0 0.5px 0 rgba(255, 255, 255, 0.5);
 }
 
 body.is-mobile.theme-light .workspace-drawer {
@@ -2468,12 +2656,28 @@ body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glas
   transition: var(--anim-duration-moderate) var(--anim-motion-cupertino) !important;
 }
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-light .mod-sidedock.mod-left-split {
-  outline: var(--border-width) solid white;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.05), 0 4px 32px rgba(0, 0, 0, 0.05), -32px 0px 0 32px var(--background-primary);
+  outline: var(--border-width) solid rgba(255, 255, 255, 0.9);
+  box-shadow: var(--shadow-glass), -32px 0px 0 32px var(--background-primary);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-light .mod-sidedock.mod-left-split::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-window);
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%);
 }
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-dark .mod-sidedock.mod-left-split {
   outline: var(--border-width) solid var(--background-modifier-border);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25), -32px 0px 0 32px var(--background-primary);
+  box-shadow: var(--shadow-glass), -32px 0px 0 32px var(--background-primary);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-dark .mod-sidedock.mod-left-split::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-window);
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
 }
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.show-ribbon:not(.is-hidden-frameless) .workspace-ribbon .sidebar-toggle-button {
   margin-top: 12px;
@@ -2500,6 +2704,8 @@ body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glas
   display: flex;
   margin: 8px 0 8px 8px;
   height: -webkit-fill-available;
+  position: relative;
+  will-change: transform, box-shadow;
 }
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager .mod-sidedock.mod-left-split .workspace-tabs.mod-top {
   --header-height: 40px;
@@ -2549,7 +2755,45 @@ body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glas
   border-color: var(--divider-color);
 }
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager:not(.sidedock-glass-tint-off) .mod-sidedock {
-  background-color: color-mix(in srgb, var(--background-primary) 98%, var(--color-accent));
+  background-color: color-mix(in srgb, var(--background-primary) 97%, var(--color-accent) 3%);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.is-focused .mod-sidedock.mod-left-split:hover.theme-light {
+  box-shadow: var(--shadow-glass-hover), -32px 0px 0 32px var(--background-primary);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.is-focused .mod-sidedock.mod-left-split:hover.theme-dark {
+  box-shadow: var(--shadow-glass-hover), -32px 0px 0 32px var(--background-primary);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager .tree-item-self {
+  overflow: visible;
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager .tree-item-self:hover {
+  backdrop-filter: blur(8px) saturate(1.3);
+  background-color: color-mix(in srgb, var(--background-primary) 90%, var(--color-accent) 10%);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager .tree-item-self.is-active {
+  backdrop-filter: blur(10px) saturate(1.4);
+  background-color: color-mix(in srgb, var(--background-primary) 85%, var(--color-accent) 15%);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager .tree-item-self.is-active:hover {
+  backdrop-filter: blur(12px) saturate(1.5);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-light .tree-item-self:hover {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08), 0 0.5px 1px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-light .tree-item-self.is-active {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.02);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-light .tree-item-self.is-active:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.7), inset 0 -1px 2px rgba(0, 0, 0, 0.03);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-dark .tree-item-self:hover {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4), 0 0.5px 1px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-dark .tree-item-self.is-active {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off).css-settings-manager.theme-dark .tree-item-self.is-active:hover {
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
 }
 
 body.is-mobile {
@@ -3151,11 +3395,18 @@ body:not(.empty-state-off).is-tablet .empty-state-action:first-child {
 
 .clickable-icon {
   transition: all 0.1s ease-in-out !important;
+  will-change: transform, box-shadow;
 }
 
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)) .workspace .clickable-icon:not([aria-disabled=true]):hover, body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)) .workspace .clickable-icon.has-active-menu {
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-glass);
   background-color: var(--background-primary);
+  transform: scale(1.01);
+}
+body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)) .workspace .clickable-icon:not([aria-disabled=true]):active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-xs);
+  transition: all 0.05s ease-in-out !important;
 }
 
 .clickable-icon {
@@ -3170,6 +3421,15 @@ button:not(.clickable-icon) {
   border: none;
   font-weight: var(--font-normal);
   line-height: unset;
+  transition: all 0.1s ease-in-out;
+  will-change: transform;
+}
+button:not(.clickable-icon):hover {
+  transform: translateY(-1px);
+}
+button:not(.clickable-icon):active {
+  transform: scale(0.97);
+  transition: all 0.05s ease-in-out;
 }
 
 .input-right-decorator {
@@ -3626,14 +3886,25 @@ li[data-task=L] > p > input:checked::after {
 
 body:not(.is-mobile) .menu,
 body:not(.is-mobile) .suggestion-container {
-  backdrop-filter: var(--blur-s);
+  backdrop-filter: var(--blur-progressive-s);
   border-radius: var(--radius-m);
   padding: 0;
   border: none;
+  box-shadow: var(--shadow-glass);
+  position: relative;
+}
+body:not(.is-mobile) .menu::before,
+body:not(.is-mobile) .suggestion-container::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-m);
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.05) 100%);
 }
 body:not(.is-mobile) .menu:not(:hover),
 body:not(.is-mobile) .suggestion-container:not(:hover) {
-  backdrop-filter: var(--blur-l);
+  backdrop-filter: var(--blur-progressive-l);
 }
 body:not(.is-mobile) .menu:not(:hover) .menu-item.selected:not(.is-label):not(.is-disabled),
 body:not(.is-mobile) .menu:not(:hover) .suggestion-item.is-selected:not(.mod-group),
@@ -3667,6 +3938,10 @@ body:not(.is-mobile) .suggestion-container .suggestion-item {
   border-radius: calc(var(--radius-m) - 4px);
   padding: 4px 12px;
   font-size: var(--font-ui-small);
+  transition: all 0.1s ease-in-out;
+  will-change: transform, background-color;
+  position: relative;
+  z-index: 1;
 }
 body:not(.is-mobile) .menu .menu-item .svg-icon,
 body:not(.is-mobile) .menu .suggestion-item .svg-icon,
@@ -3674,12 +3949,19 @@ body:not(.is-mobile) .suggestion-container .menu-item .svg-icon,
 body:not(.is-mobile) .suggestion-container .suggestion-item .svg-icon {
   --icon-size: var(--icon-xs);
 }
+body:not(.is-mobile) .menu .menu-item:hover,
+body:not(.is-mobile) .menu .suggestion-item:hover,
+body:not(.is-mobile) .suggestion-container .menu-item:hover,
+body:not(.is-mobile) .suggestion-container .suggestion-item:hover {
+  transform: scale(1.01);
+}
 body:not(.is-mobile) .menu .menu-item.selected:not(.is-label):not(.is-disabled),
 body:not(.is-mobile) .menu .suggestion-item.is-selected:not(.mod-group),
 body:not(.is-mobile) .suggestion-container .menu-item.selected:not(.is-label):not(.is-disabled),
 body:not(.is-mobile) .suggestion-container .suggestion-item.is-selected:not(.mod-group) {
   background-color: var(--interactive-accent);
   color: var(--text-on-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 body:not(.is-mobile) .menu .menu-item.selected:not(.is-label):not(.is-disabled) .menu-item-icon,
 body:not(.is-mobile) .menu .menu-item.selected:not(.is-label):not(.is-disabled) .suggestion-flair,
@@ -4800,13 +5082,6 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
   --divider-color: rgba(var(--mono-rgb-100), 0.05) !important;
   --workspace-background-translucent: rgb(from var(--background-primary) r g b / 90%);
   background-color: rgb(var(--mono-rgb-0));
-  /********** Components **********/
-  /********** Editor **********/
-  /********** Sidebar **********/
-  /********** Settings **********/
-  /********** Menu and Suggestions **********/
-  /********** Modal **********/
-  /********** Prompt **********/
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile).theme-light {
   --shadow-s: 0px 1px 2px rgba(0, 0, 0, 0.028), 0px 3.4px 6.7px rgba(0, 0, 0, 0.042), 0px 15px 30px rgba(0, 0, 0, 0.07) !important;
@@ -4846,6 +5121,9 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile)::after {
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile).is-hidden-frameless .titlebar .titlebar-button-container.mod-right .titlebar-button {
   height: var(--header-height);
+}
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Components **********/
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) button[class*=mod-]:not(.view-action) {
   box-shadow: var(--input-shadow) !important;
@@ -4900,9 +5178,15 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile) .checkbox-container.is-e
   --toggle-thumb-color: var(--text-on-accent);
   background: var(--interactive-accent);
 }
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Editor **********/
+}
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) .mod-root .workspace-tab-container {
   outline: var(--border-width) solid var(--background-modifier-hover);
   box-shadow: none !important;
+}
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Sidebar **********/
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile).show-ribbon .mod-sidedock.is-sidedock-collapsed .workspace-tabs.mod-top-left-space .workspace-tab-header-container {
   padding-left: 4px !important;
@@ -4954,6 +5238,9 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile) .vertical-tab-nav-item.i
   width: 4px;
   content: "";
 }
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Settings **********/
+}
 body.mod-windows:not(.windows-mode-off):not(.is-mobile).theme-light .modal.mod-sidebar-layout .setting-item:not(.setting-item-heading) {
   border: var(--border-width) solid rgba(0, 0, 0, 0.05);
   background-color: rgb(255, 255, 255);
@@ -4994,6 +5281,9 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile) .modal.mod-sidebar-layou
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) .modal.mod-sidebar-layout .setting-item:not(:last-child):not(.setting-item-heading) {
   margin-bottom: 4px;
+}
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Menu and Suggestions **********/
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) .menu,
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) .suggestion-container {
@@ -5046,6 +5336,9 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile) .menu .bases-toolbar-men
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) .suggestion-container .bases-toolbar-menu-item {
   border-radius: var(--radius-m) !important;
 }
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Modal **********/
+}
 body.mod-windows:not(.windows-mode-off):not(.is-mobile).theme-dark .modal:not(.mod-sidebar-layout) .modal-button-container {
   background-color: var(--color-base-05);
   border-top-color: var(--color-base-00);
@@ -5092,6 +5385,9 @@ body.mod-windows:not(.windows-mode-off):not(.is-mobile) .modal:not(.mod-sidebar-
   right: 0;
   bottom: 0;
   left: 0;
+}
+body.mod-windows:not(.windows-mode-off):not(.is-mobile) {
+  /********** Prompt **********/
 }
 body.mod-windows:not(.windows-mode-off):not(.is-mobile) .prompt {
   background-color: var(--modal-background);
@@ -5178,11 +5474,6 @@ body {
   border: none;
   color: var(--text-muted);
   font-size: var(--font-small);
-  /* Paragraphs */
-  /* Links */
-  /* Buttons */
-  /* Lists */
-  /* Images */
 }
 .cards table.dataview tbody > tr > td:first-child a, .cards table.dataview tbody > tr > td:has(span > img) ~ td a {
   display: block;
@@ -5195,6 +5486,9 @@ body {
 .cards table.dataview tbody > tr > td:last-child {
   margin-bottom: 8px;
 }
+.cards table.dataview tbody > tr > td {
+  /* Paragraphs */
+}
 .cards table.dataview tbody > tr > td > * {
   padding: calc(var(--cards-padding) / 3) 0;
 }
@@ -5202,8 +5496,14 @@ body {
   margin: 0 16px;
   padding: 4px 0;
 }
+.cards table.dataview tbody > tr > td {
+  /* Links */
+}
 .cards table.dataview tbody > tr > td a {
   text-decoration: none;
+}
+.cards table.dataview tbody > tr > td {
+  /* Buttons */
 }
 .cards table.dataview tbody > tr > td > button {
   margin: calc(var(--cards-padding) / 2) 0;
@@ -5212,10 +5512,16 @@ body {
 .cards table.dataview tbody > tr > td:last-child > button {
   margin-bottom: calc(var(--cards-padding) / 6);
 }
+.cards table.dataview tbody > tr > td {
+  /* Lists */
+}
 .cards table.dataview tbody > tr > td > ul {
   margin: 0 auto !important;
   padding: 0.25em 0 !important;
   width: 100%;
+}
+.cards table.dataview tbody > tr > td {
+  /* Images */
 }
 .cards table.dataview tbody > tr > td:has(img) {
   display: block;
@@ -5595,16 +5901,6 @@ body.is-mobile.is-android:not(.material-off) {
   --shadow-s: rgba(0, 0, 0, 0.1) 0px 8px 30px !important;
   --shadow-l: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12) !important;
   --side-padding: 16px !important;
-  /********** Components **********/
-  /********** Mode Switchcer **********/
-  /********** Top Bar **********/
-  /********** Bottom Bar **********/
-  /********** Menu **********/
-  /********** Sidebar **********/
-  /********** Settings **********/
-  /********** Modal **********/
-  /********** Prompt **********/
-  /********** Tab Switcher **********/
 }
 body.is-mobile.is-android:not(.material-off).theme-light {
   --interactive-normal: var(--background-secondary);
@@ -5618,6 +5914,9 @@ body.is-mobile.is-android:not(.material-off).theme-dark {
 }
 body.is-mobile.is-android:not(.material-off).is-phone {
   --view-header-height: var(--input-height);
+}
+body.is-mobile.is-android:not(.material-off) {
+  /********** Components **********/
 }
 body.is-mobile.is-android:not(.material-off) button:not(.clickable-icon):not([class*=mod-]),
 body.is-mobile.is-android:not(.material-off) select,
@@ -5684,6 +5983,9 @@ body.is-mobile.is-android:not(.material-off) .checkbox-container:not(.is-enabled
 body.is-mobile.is-android:not(.material-off) .checkbox-container:not(.is-enabled)::after {
   background-color: var(--text-muted);
 }
+body.is-mobile.is-android:not(.material-off) {
+  /********** Mode Switchcer **********/
+}
 body.is-mobile.is-android:not(.material-off).is-phone:not(.mod-toolbar-open) .mod-root .view-actions button:nth-last-child(2) {
   right: var(--side-padding);
   z-index: var(--layer-cover);
@@ -5695,8 +5997,14 @@ body.is-mobile.is-android:not(.material-off).is-phone .mod-root .workspace-leaf-
   background-color: var(--interactive-accent-active) !important;
   color: var(--text-accent-active) !important;
 }
+body.is-mobile.is-android:not(.material-off) {
+  /********** Top Bar **********/
+}
 body.is-mobile.is-android:not(.material-off) .view-action.clickable-icon {
   background-color: var(--modal-background) !important;
+}
+body.is-mobile.is-android:not(.material-off) {
+  /********** Bottom Bar **********/
 }
 body.is-mobile.is-android:not(.material-off) .mobile-navbar,
 body.is-mobile.is-android:not(.material-off) .workspace-drawer .nav-header {
@@ -5708,6 +6016,9 @@ body.is-mobile.is-android:not(.material-off) .mobile-toolbar-options-list {
 }
 body.is-mobile.is-android:not(.material-off) .workspace-drawer .nav-buttons-container {
   background-color: var(--background-primary);
+}
+body.is-mobile.is-android:not(.material-off) {
+  /********** Menu **********/
 }
 body.is-mobile.is-android:not(.material-off).is-phone .menu {
   border-radius: var(--modal-radius) var(--modal-radius) 0 0;
@@ -5773,6 +6084,9 @@ body.is-mobile.is-android:not(.material-off).is-tablet .menu .menu-scroll {
 body.is-mobile.is-android:not(.material-off).is-tablet .menu .menu-separator {
   margin: 4px 0;
 }
+body.is-mobile.is-android:not(.material-off) {
+  /********** Sidebar **********/
+}
 body.is-mobile.is-android:not(.material-off) .workspace-drawer-header-icon,
 body.is-mobile.is-android:not(.material-off) .modal-setting-back-button,
 body.is-mobile.is-android:not(.material-off) .modal-close-button {
@@ -5806,6 +6120,9 @@ body.is-mobile.is-android:not(.material-off) .workspace-drawer .view-content {
 }
 body.is-mobile.is-android:not(.material-off) .workspace-drawer .view-content > div:not(.nav-header):not(:empty) {
   border-radius: var(--radius-m);
+}
+body.is-mobile.is-android:not(.material-off) {
+  /********** Settings **********/
 }
 body.is-mobile.is-android:not(.material-off).theme-light .modal.mod-sidebar-layout .vertical-tab-nav-item,
 body.is-mobile.is-android:not(.material-off).theme-light .modal.mod-sidebar-layout .setting-item:not(.setting-item-heading) {
@@ -5904,6 +6221,9 @@ body.is-mobile.is-android:not(.material-off).is-tablet .modal.mod-sidebar-layout
   border-bottom-right-radius: var(--radius-m) !important;
   border-bottom-left-radius: var(--radius-m) !important;
 }
+body.is-mobile.is-android:not(.material-off) {
+  /********** Modal **********/
+}
 body.is-mobile.is-android:not(.material-off) .modal-container {
   align-items: center;
 }
@@ -5935,6 +6255,9 @@ body.is-mobile.is-android:not(.material-off) .modal:not(.mod-sidebar-layout) .mo
   flex-grow: 0;
   flex: 0;
 }
+body.is-mobile.is-android:not(.material-off) {
+  /********** Prompt **********/
+}
 body.is-mobile.is-android:not(.material-off) .prompt .prompt-input,
 body.is-mobile.is-android:not(.material-off) .prompt .prompt-input-container .search-input-clear-button {
   box-shadow: none !important;
@@ -5945,6 +6268,9 @@ body.is-mobile.is-android:not(.material-off) .prompt .prompt-input-container .se
 body.is-mobile.is-android:not(.material-off) .prompt .suggestion-item {
   border-radius: 100vh;
   padding: var(--nav-item-padding);
+}
+body.is-mobile.is-android:not(.material-off) {
+  /********** Tab Switcher **********/
 }
 body.is-mobile.is-android:not(.material-off) .mobile-tab-switcher-menubar {
   border: none;
@@ -6392,3 +6718,5 @@ body:not(.block-width-off) div.bases-100 .cm-content > .bases-embed {
   margin-left: calc(-1 * var(--file-margins)) !important;
   margin-right: calc(-1 * var(--file-margins)) !important;
 }
+
+/*# sourceMappingURL=theme.css.map */

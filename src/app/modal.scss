@@ -4,10 +4,21 @@ body {
   }
 
   .modal:not(.mod-sidebar-layout) {
-    backdrop-filter: var(--blur-m);
-    box-shadow: var(--shadow-s);
+    backdrop-filter: var(--blur-progressive-m);
+    box-shadow: var(--shadow-glass);
     min-width: 320px;
     gap: 8px;
+    position: relative;
+    will-change: transform, box-shadow;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--modal-radius);
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 50%, rgba(0, 0, 0, 0.04) 100%);
+    }
   }
 
   .modal-button-container {
@@ -84,9 +95,20 @@ body.is-mobile {
   }
 
   .modal:not(.mod-sidebar-layout) {
-    backdrop-filter: var(--blur-s);
+    backdrop-filter: var(--blur-progressive-s);
     border-radius: var(--modal-radius);
     background-color: var(--modal-background) !important;
+    box-shadow: var(--shadow-glass);
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--modal-radius);
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.06) 100%);
+    }
 
     .modal-header {
       border: none !important;

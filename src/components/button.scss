@@ -1,12 +1,20 @@
 .clickable-icon {
   transition: all 0.1s ease-in-out !important;
+  will-change: transform, box-shadow;
 }
 
 body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)) .workspace .clickable-icon {
   &:not([aria-disabled="true"]):hover,
   &.has-active-menu {
-    box-shadow: var(--shadow-xs);
+    box-shadow: var(--shadow-glass);
     background-color: var(--background-primary);
+    transform: scale(1.01);
+  }
+
+  &:not([aria-disabled="true"]):active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-xs);
+    transition: all 0.05s ease-in-out !important;
   }
 }
 .clickable-icon {
@@ -20,6 +28,17 @@ button:not(.clickable-icon) {
   border: none;
   font-weight: var(--font-normal);
   line-height: unset;
+  transition: all 0.1s ease-in-out;
+  will-change: transform;
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.97);
+    transition: all 0.05s ease-in-out;
+  }
 }
 
 .input-right-decorator {

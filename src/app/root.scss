@@ -17,6 +17,23 @@ settings:
         title: Disable sidebar tinting
         type: class-toggle
     -
+        id: liquid-glass-intensity
+        title: Liquid Glass intensity
+        description: Adjust the intensity of the Liquid Glass effects (blur, vibrancy, depth)
+        type: class-select
+        allowEmpty: false
+        default: liquid-glass-normal
+        options:
+            -
+                label: Subtle
+                value: liquid-glass-subtle
+            -
+                label: Normal
+                value: liquid-glass-normal
+            -
+                label: Enhanced
+                value: liquid-glass-enhanced
+    -
         id: windows-header
         title: On Windows
         type: heading
@@ -130,6 +147,10 @@ body {
   --blur-s: blur(4px) saturate(1.5) brightness(1.025);
   --blur-m: blur(8px) saturate(1.5) brightness(1.025);
   --blur-l: blur(16px) saturate(1.5) brightness(1.025);
+  --blur-xl: blur(24px) saturate(1.6) brightness(1.03);
+  --blur-progressive-s: blur(6px) saturate(1.5) brightness(1.025);
+  --blur-progressive-m: blur(12px) saturate(1.6) brightness(1.03);
+  --blur-progressive-l: blur(20px) saturate(1.7) brightness(1.035);
   --caret-color: var(--text-accent);
   --callout-border-width: var(--border-width);
   --callout-padding: 16px;
@@ -275,10 +296,14 @@ body {
 
     --shadow-base: inset 1px 1px 2px rgba(255, 255, 255, 0.5), inset -1px -1px 2px rgba(255, 255, 255, 0.5), inset 0 4px 16px rgba(255, 255, 255, 0.025);
     --shadow-border: 0 0 1px 0 rgba(0, 0, 0, 0.4);
+    --shadow-specular: inset 0.5px 0.5px 1.5px rgba(255, 255, 255, 0.8), inset -0.5px -0.5px 1.5px rgba(255, 255, 255, 0.6);
+    --shadow-edge-light: inset 0 1px 0 0 rgba(255, 255, 255, 0.4), inset 1px 0 0 0 rgba(255, 255, 255, 0.3);
 
     --shadow-xs: var(--shadow-base), inset 0 -8px 48px rgba(0, 0, 0, 0.02), 0 1px 8px rgba(0, 0, 0, 0.025), 0 4px 48px rgba(0, 0, 0, 0.095);
     --shadow-s: var(--shadow-base), inset 0 0 1px 1px white, var(--shadow-border), 0 8px 15px 0 rgba(0, 0, 0, 0.2);
     --shadow-l: var(--shadow-border), inset 0 0 1px 1px white, 0 18px 60px 0 rgba(0, 0, 0, 0.3);
+    --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+    --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 8px 32px rgba(0, 0, 0, 0.16), 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 
   &.theme-dark {
@@ -320,10 +345,14 @@ body {
 
     --shadow-base: inset 1px 1.5px 1px -1px rgba(255, 255, 255, 0.2), inset -1px -1.5px 1px -1px rgba(255, 255, 255, 0.15), inset 0 4px 16px rgba(255, 255, 255, 0.025);
     --shadow-border: 0 0 1px 0 rgba(255, 255, 255, 0.3);
+    --shadow-specular: inset 0.5px 0.5px 1.5px rgba(255, 255, 255, 0.3), inset -0.5px -0.5px 1.5px rgba(255, 255, 255, 0.2);
+    --shadow-edge-light: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), inset 1px 0 0 0 rgba(255, 255, 255, 0.18);
 
     --shadow-xs: inset 0 8px 64px rgba(255, 255, 255, 0.125), var(--shadow-base);
     --shadow-s: var(--shadow-border), 0 0 1px rgba(255, 255, 255, 0.5), 0 0 1px 0 rgba(0, 0, 0, 0.4), 0 8px 15px 0 rgba(0, 0, 0, 0.2);
     --shadow-l: var(--shadow-border), 0 0 1px rgba(255, 255, 255, 0.5), 0 0 1px 0 rgba(0, 0, 0, 0.7), 0 18px 60px 0 rgba(0, 0, 0, 0.3);
+    --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 4px 24px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
+    --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.25);
   }
 
   &.is-fullscreen {
@@ -452,4 +481,65 @@ body:not(.is-mobile) {
 
 svg.svg-icon {
   fill: none !important ;
+}
+
+// Liquid Glass intensity settings
+body.liquid-glass-subtle {
+  --blur-progressive-s: blur(3px) saturate(1.3) brightness(1.015);
+  --blur-progressive-m: blur(8px) saturate(1.4) brightness(1.02);
+  --blur-progressive-l: blur(14px) saturate(1.5) brightness(1.025);
+
+  &.theme-light {
+    --shadow-glass: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.3), var(--shadow-border), 0 2px 16px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-glass-hover: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.3), var(--shadow-border), 0 4px 20px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.08);
+  }
+
+  &.theme-dark {
+    --shadow-glass: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.2), var(--shadow-border), 0 2px 16px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.15);
+    --shadow-glass-hover: var(--shadow-specular), inset 0 1px 0 0 rgba(255, 255, 255, 0.2), var(--shadow-border), 0 4px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.2);
+  }
+}
+
+body.liquid-glass-enhanced {
+  --blur-progressive-s: blur(8px) saturate(1.7) brightness(1.035);
+  --blur-progressive-m: blur(16px) saturate(1.8) brightness(1.04);
+  --blur-progressive-l: blur(28px) saturate(2.0) brightness(1.05);
+
+  &.theme-light {
+    --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 6px 32px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 12px 48px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.12), inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+  }
+
+  &.theme-dark {
+    --shadow-glass: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 6px 32px rgba(0, 0, 0, 0.4), 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+    --shadow-glass-hover: var(--shadow-specular), var(--shadow-edge-light), var(--shadow-border), 0 12px 48px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+}
+
+// Accessibility: Reduced Transparency
+@media (prefers-reduced-transparency: reduce) {
+  body {
+    --blur-s: none;
+    --blur-m: none;
+    --blur-l: none;
+    --blur-xl: none;
+    --blur-progressive-s: none;
+    --blur-progressive-m: none;
+    --blur-progressive-l: none;
+  }
+
+  body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glass-off) {
+    .mod-sidedock {
+      background-color: var(--background-primary-alt) !important;
+    }
+  }
+}
+
+// Accessibility: Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

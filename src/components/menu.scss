@@ -1,12 +1,23 @@
 body:not(.is-mobile) .menu,
 body:not(.is-mobile) .suggestion-container {
-  backdrop-filter: var(--blur-s);
+  backdrop-filter: var(--blur-progressive-s);
   border-radius: var(--radius-m);
   padding: 0;
   border: none;
+  box-shadow: var(--shadow-glass);
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-m);
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.05) 100%);
+  }
 
   &:not(:hover) {
-    backdrop-filter: var(--blur-l);
+    backdrop-filter: var(--blur-progressive-l);
 
     .menu-item.selected:not(.is-label):not(.is-disabled),
     .suggestion-item.is-selected:not(.mod-group) {
@@ -33,15 +44,24 @@ body:not(.is-mobile) .suggestion-container {
     border-radius: calc(var(--radius-m) - 4px);
     padding: 4px 12px;
     font-size: var(--font-ui-small);
+    transition: all 0.1s ease-in-out;
+    will-change: transform, background-color;
+    position: relative;
+    z-index: 1;
 
     .svg-icon {
       --icon-size: var(--icon-xs);
+    }
+
+    &:hover {
+      transform: scale(1.01);
     }
   }
   .menu-item.selected:not(.is-label):not(.is-disabled),
   .suggestion-item.is-selected:not(.mod-group) {
     background-color: var(--interactive-accent);
     color: var(--text-on-accent);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
     .menu-item-icon,
     .suggestion-flair {

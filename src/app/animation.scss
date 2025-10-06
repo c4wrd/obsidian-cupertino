@@ -66,6 +66,29 @@ body:not(.mod-windows:not(.windows-mode-off)):not(.is-android:not(.material-off)
 
   @starting-style {
     transform: scale(0.98);
+    filter: blur(2px);
+  }
+}
+
+// Liquid Glass spring animations
+@keyframes glassFlexIn {
+  0% {
+    transform: scale(0.95);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes glassMorph {
+  0%, 100% {
+    border-radius: var(--clickable-icon-radius);
+  }
+  50% {
+    border-radius: calc(var(--clickable-icon-radius) * 0.8);
   }
 }
 
