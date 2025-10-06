@@ -721,13 +721,29 @@ body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .work
   border: none;
   background-color: var(--background-modifier-hover);
   padding: 0;
+  will-change: transform, opacity, box-shadow;
+  position: relative;
 }
 body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header::before, body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header::after {
   display: none;
 }
+body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header:hover:not(.is-active) {
+  opacity: 0.75;
+  transform: scale(1.005);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
 body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active {
   opacity: 1;
-  box-shadow: none;
+  box-shadow: var(--shadow-glass);
+  backdrop-filter: var(--blur-progressive-s);
+}
+body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--tab-radius-active);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.02) 100%);
+  pointer-events: none;
 }
 @starting-style {
   body:not(.is-phone) .workspace .mod-root .workspace-tabs:not(.mod-stacked) .workspace-tab-header.mod-active.is-active {
@@ -797,7 +813,8 @@ body:not(.is-phone) .workspace .mod-sidedock .workspace-tab-header-container-inn
 }
 body:not(.is-phone) .workspace .mod-sidedock .workspace-tab-header-container-inner:hover .workspace-tab-header.is-active {
   background-color: var(--background-primary);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-glass);
+  transform: scale(1.005);
 }
 body:not(.is-phone) .workspace .mod-sidedock .workspace-tab-header {
   border-radius: var(--tab-radius);
@@ -2796,6 +2813,74 @@ body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glas
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
 }
 
+body:not(.is-mobile) .view-header {
+  backdrop-filter: var(--blur-progressive-m);
+  background-color: rgba(var(--mono-rgb-0), 0.75);
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  will-change: backdrop-filter, box-shadow;
+}
+body:not(.is-mobile) .view-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+body:not(.is-mobile) .view-header:hover::before {
+  opacity: 1;
+}
+body:not(.is-mobile) .workspace-leaf-content[data-type=markdown] .view-header.is-sticking,
+body:not(.is-mobile) .workspace-leaf-content .view-header.is-scrolled {
+  backdrop-filter: var(--blur-progressive-l);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+body:not(.is-mobile) .view-actions {
+  gap: 2px;
+}
+body:not(.is-mobile) .view-actions .clickable-icon {
+  transition: all 0.12s ease-in-out;
+}
+body:not(.is-mobile) .view-actions .clickable-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1), inset 0 0.5px 0 rgba(255, 255, 255, 0.3);
+}
+body:not(.is-mobile) .view-actions .clickable-icon:active {
+  transform: scale(0.95);
+  transition: all 0.05s ease-in-out;
+}
+body:not(.is-mobile) .view-header-title {
+  transition: all 0.15s ease-in-out;
+}
+body:not(.is-mobile) .view-header::after {
+  background: linear-gradient(to right, transparent, var(--divider-color) 10%, var(--divider-color) 90%, transparent);
+}
+body:not(.is-mobile).theme-light .view-header {
+  background-color: rgba(var(--mono-rgb-0), 0.8);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+}
+body:not(.is-mobile).theme-light .view-header.is-sticking,
+body:not(.is-mobile).theme-light .view-header.is-scrolled {
+  background-color: rgba(var(--mono-rgb-0), 0.9);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+body:not(.is-mobile).theme-dark .view-header {
+  background-color: rgba(var(--mono-rgb-100), 0.02);
+  box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+body:not(.is-mobile).theme-dark .view-header.is-sticking,
+body:not(.is-mobile).theme-dark .view-header.is-scrolled {
+  background-color: rgba(var(--mono-rgb-100), 0.04);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+body.is-mobile .view-header {
+  backdrop-filter: var(--blur-s);
+  background-color: rgba(var(--mono-rgb-0), 0.85);
+}
+
 body.is-mobile {
   --background-modifier-form-field: var(--interactive-normal) !important;
   --border-width: 0.3px;
@@ -4163,10 +4248,33 @@ body.is-phone .notice-container {
 }
 
 .popover {
-  backdrop-filter: var(--blur-l);
+  backdrop-filter: var(--blur-progressive-l);
   animation: var(--anim-duration-fast) fadeInScale;
   border-radius: var(--radius-l);
   background-color: var(--workspace-background-translucent);
+  box-shadow: var(--shadow-glass);
+  position: relative;
+  will-change: transform, opacity;
+}
+.popover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-l);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.04) 100%);
+  pointer-events: none;
+}
+.popover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-l);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+}
+
+body.theme-dark .popover::before {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
 }
 
 .prompt-input-container::before {
@@ -4178,10 +4286,20 @@ body:not(.is-phone) .modal-container:has(.prompt):not(:last-child) {
   opacity: 0;
 }
 body:not(.is-phone) .prompt {
-  backdrop-filter: var(--blur-m);
+  backdrop-filter: var(--blur-progressive-m);
   border: none;
   background-color: var(--modal-background);
   animation: var(--anim-duration-slow) bounceInScale var(--anim-motion-cupertino);
+  box-shadow: var(--shadow-glass);
+  position: relative;
+}
+body:not(.is-phone) .prompt::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%);
+  pointer-events: none;
 }
 body:not(.is-phone) .prompt-input-container {
   --search-clear-button-size: var(--search-icon-size);
@@ -4217,6 +4335,16 @@ body:not(.is-phone) .prompt-instructions {
 body:not(.is-phone) .prompt .suggestion-item {
   padding: 12px var(--side-padding);
   border-radius: var(--radius-m);
+  transition: all 0.12s ease-in-out;
+  will-change: transform, background-color;
+}
+body:not(.is-phone) .prompt .suggestion-item:hover {
+  transform: scale(1.005);
+  background-color: var(--background-modifier-hover);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+}
+body:not(.is-phone) .prompt .suggestion-item.is-selected {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
 
 body.is-mobile .prompt-input-container::before {
@@ -4299,6 +4427,78 @@ body.is-tablet .prompt-input {
 body.is-tablet .prompt-input-container {
   display: flex;
   align-items: center;
+}
+
+body:not(.is-mobile) ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+body:not(.is-mobile) ::-webkit-scrollbar-track {
+  background: transparent;
+}
+body:not(.is-mobile) ::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--mono-rgb-100), 0.15);
+  border-radius: 100vh;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  transition: all 0.2s ease-in-out;
+}
+body:not(.is-mobile) ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--mono-rgb-100), 0.3);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 4px rgba(var(--mono-rgb-100), 0.1);
+}
+body:not(.is-mobile) ::-webkit-scrollbar-thumb:active {
+  background-color: rgba(var(--mono-rgb-100), 0.4);
+}
+body:not(.is-mobile) * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--mono-rgb-100), 0.15) transparent;
+}
+body:not(.is-mobile).theme-light ::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+body:not(.is-mobile).theme-light ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 6px rgba(0, 0, 0, 0.1);
+}
+body:not(.is-mobile).theme-light ::-webkit-scrollbar-thumb:active {
+  background-color: rgba(0, 0, 0, 0.35);
+}
+body:not(.is-mobile).theme-dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+body:not(.is-mobile).theme-dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.15), 0 0 6px rgba(255, 255, 255, 0.08);
+}
+body:not(.is-mobile).theme-dark ::-webkit-scrollbar-thumb:active {
+  background-color: rgba(255, 255, 255, 0.35);
+}
+
+body.mod-macos:not(.is-mobile) ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+body.mod-macos:not(.is-mobile) ::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+}
+
+body.mod-windows:not(.is-mobile):not(.windows-mode-off) ::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+body.mod-windows:not(.is-mobile):not(.windows-mode-off) ::-webkit-scrollbar-track {
+  background: var(--background-secondary);
+}
+body.mod-windows:not(.is-mobile):not(.windows-mode-off) ::-webkit-scrollbar-thumb {
+  background-color: var(--background-modifier-border-hover);
+  border: 4px solid transparent;
+}
+body.mod-windows:not(.is-mobile):not(.windows-mode-off) ::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-faint);
 }
 
 body:not(.mod-windows:not(.windows-mode-off)):not(.is-android:not(.material-off)) input[type=range]::-webkit-slider-thumb {
@@ -4444,6 +4644,15 @@ body:not(.is-mobile) input[type=number],
 body:not(.is-mobile) input[type=search] {
   box-shadow: none;
   border: var(--border-width) solid var(--background-modifier-border);
+  transition: all 0.15s ease-in-out;
+  will-change: box-shadow, border-color;
+}
+body:not(.is-mobile) textarea:hover:not(:disabled),
+body:not(.is-mobile) input[type=text]:hover:not(:disabled),
+body:not(.is-mobile) input[type=number]:hover:not(:disabled),
+body:not(.is-mobile) input[type=search]:hover:not(:disabled) {
+  border-color: var(--background-modifier-border-hover);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 body:not(.is-mobile) textarea:active, body:not(.is-mobile) textarea:focus, body:not(.is-mobile) textarea:focus-visible,
 body:not(.is-mobile) input[type=text]:active,
@@ -4455,7 +4664,8 @@ body:not(.is-mobile) input[type=number]:focus-visible,
 body:not(.is-mobile) input[type=search]:active,
 body:not(.is-mobile) input[type=search]:focus,
 body:not(.is-mobile) input[type=search]:focus-visible {
-  box-shadow: 0 0 0 2px var(--background-modifier-border-focus);
+  box-shadow: 0 0 0 2px var(--background-modifier-border-focus), 0 2px 8px rgba(0, 0, 0, 0.08), inset 0 1px 2px rgba(0, 0, 0, 0.02);
+  border-color: transparent;
 }
 body:not(.is-mobile) textarea:disabled, body:not(.is-mobile) textarea:disabled:active, body:not(.is-mobile) textarea:disabled:focus, body:not(.is-mobile) textarea:disabled:focus-visible,
 body:not(.is-mobile) input[type=text]:disabled,
@@ -4478,6 +4688,17 @@ body:not(.is-mobile) .dropdown {
   padding: 4px 32px 4px 12px;
   box-shadow: none;
   border: none;
+  transition: all 0.12s ease-in-out;
+}
+body:not(.is-mobile) select:hover:not(:disabled),
+body:not(.is-mobile) .dropdown:hover:not(:disabled) {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), inset 0 0.5px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-0.5px);
+}
+body:not(.is-mobile) select:active,
+body:not(.is-mobile) .dropdown:active {
+  transform: scale(0.98);
+  transition: all 0.05s ease-in-out;
 }
 body:not(.is-mobile) .search-input-container {
   --search-icon-size: var(--icon-xs);
@@ -5046,6 +5267,92 @@ body.is-phone .workspace-leaf-content[data-type=markdown] .select-image-icon {
 }
 .callout-icon .lucide-quote {
   -webkit-mask-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='22' height='14' fill='none' viewBox='0 0 22 14'%3e%3cpath fill='black' d='M0 4.697c0 2.598 1.934 4.668 4.404 4.668A4.09 4.09 0 0 0 7.48 8.008h.264C7.178 9.854 5.46 11.396 3.33 12.03c-.312.098-.537.186-.674.303a.604.604 0 0 0-.234.508c0 .41.303.693.752.693.322 0 .547-.059.976-.195a8.532 8.532 0 0 0 3.496-2.197c1.31-1.368 2.12-3.194 2.12-5.362C9.766 2.12 7.44 0 4.716 0 2.032 0 0 2.05 0 4.697Zm11.729 0c0 2.598 1.923 4.668 4.404 4.668a4.105 4.105 0 0 0 3.076-1.357h.254c-.557 1.846-2.276 3.388-4.414 4.023-.313.098-.527.186-.664.303a.612.612 0 0 0-.244.508c0 .41.312.693.771.693.303 0 .537-.059.957-.195a8.372 8.372 0 0 0 3.486-2.197c1.329-1.368 2.14-3.194 2.14-5.362C21.494 2.12 19.17 0 16.444 0 13.76 0 11.73 2.05 11.73 4.697Z'/%3e%3c/svg%3e");
+}
+
+body:not(.is-mobile) .callout {
+  backdrop-filter: blur(4px) saturate(1.2);
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  border: 1px solid rgba(var(--callout-color), 0.15);
+}
+body:not(.is-mobile) .callout::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--callout-radius);
+  background: linear-gradient(135deg, rgba(var(--callout-color), 0.08) 0%, transparent 50%, rgba(var(--callout-color), 0.02) 100%);
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out;
+}
+body:not(.is-mobile) .callout:hover::before {
+  opacity: 1;
+}
+body:not(.is-mobile) .callout:hover {
+  border-color: rgba(var(--callout-color), 0.25);
+  box-shadow: 0 2px 8px rgba(var(--callout-color), 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+body:not(.is-mobile) .callout-title {
+  transition: all 0.15s ease-in-out;
+  position: relative;
+  z-index: 1;
+}
+body:not(.is-mobile) .callout-icon {
+  transition: all 0.2s var(--anim-motion-cupertino);
+  will-change: transform;
+}
+body:not(.is-mobile) .callout-icon .svg-icon {
+  transition: all 0.2s var(--anim-motion-cupertino);
+}
+body:not(.is-mobile) .callout:hover .callout-icon {
+  transform: scale(1.1);
+}
+body:not(.is-mobile) .callout:hover .callout-icon .svg-icon {
+  filter: drop-shadow(0 1px 3px rgba(var(--callout-color), 0.4));
+}
+body:not(.is-mobile) .callout.is-collapsible .callout-title {
+  cursor: pointer;
+}
+body:not(.is-mobile) .callout.is-collapsible .callout-title:hover {
+  background-color: rgba(var(--callout-color), 0.08);
+}
+body:not(.is-mobile) .callout.is-collapsible.is-collapsed .callout-icon {
+  transform: rotate(-90deg);
+}
+body:not(.is-mobile) .callout.is-collapsible:not(.is-collapsed):hover .callout-icon {
+  transform: scale(1.1) rotate(0deg);
+}
+body:not(.is-mobile) .callout-content {
+  transition: all 0.3s var(--anim-motion-cupertino);
+}
+body:not(.is-mobile) .callout.is-collapsed .callout-content {
+  animation: none;
+}
+body:not(.is-mobile) .callout[data-callout=note]::before,
+body:not(.is-mobile) .callout[data-callout=info]::before {
+  background: linear-gradient(135deg, rgba(var(--color-blue-rgb), 0.08) 0%, transparent 50%, rgba(var(--color-blue-rgb), 0.02) 100%);
+}
+body:not(.is-mobile) .callout[data-callout=tip]::before,
+body:not(.is-mobile) .callout[data-callout=success]::before {
+  background: linear-gradient(135deg, rgba(var(--color-green-rgb), 0.08) 0%, transparent 50%, rgba(var(--color-green-rgb), 0.02) 100%);
+}
+body:not(.is-mobile) .callout[data-callout=warning]::before,
+body:not(.is-mobile) .callout[data-callout=caution]::before {
+  background: linear-gradient(135deg, rgba(var(--color-orange-rgb), 0.08) 0%, transparent 50%, rgba(var(--color-orange-rgb), 0.02) 100%);
+}
+body:not(.is-mobile) .callout[data-callout=danger]::before,
+body:not(.is-mobile) .callout[data-callout=error]::before {
+  background: linear-gradient(135deg, rgba(var(--color-red-rgb), 0.08) 0%, transparent 50%, rgba(var(--color-red-rgb), 0.02) 100%);
+}
+
+body.theme-dark:not(.is-mobile) .callout::before {
+  opacity: 0.4;
+}
+body.theme-dark:not(.is-mobile) .callout:hover::before {
+  opacity: 0.7;
+}
+body.theme-dark:not(.is-mobile) .callout:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 /* NOT FOR INDEPENDENT USE - Windows Mode is built upon the rest of Cupertino components. */

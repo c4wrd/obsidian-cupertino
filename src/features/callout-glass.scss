@@ -1,0 +1,145 @@
+// Liquid Glass callout enhancements
+body:not(.is-mobile) {
+  .callout {
+    backdrop-filter: blur(4px) saturate(1.2);
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    border: 1px solid rgba(var(--callout-color), 0.15);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: var(--callout-radius);
+      background: linear-gradient(135deg,
+        rgba(var(--callout-color), 0.08) 0%,
+        transparent 50%,
+        rgba(var(--callout-color), 0.02) 100%);
+      pointer-events: none;
+      opacity: 0.6;
+      transition: opacity 0.2s ease-in-out;
+    }
+
+    &:hover::before {
+      opacity: 1;
+    }
+
+    &:hover {
+      border-color: rgba(var(--callout-color), 0.25);
+      box-shadow: 0 2px 8px rgba(var(--callout-color), 0.15),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+  }
+
+  // Callout title enhancements
+  .callout-title {
+    transition: all 0.15s ease-in-out;
+    position: relative;
+    z-index: 1;
+  }
+
+  // Callout icon animations
+  .callout-icon {
+    transition: all 0.2s var(--anim-motion-cupertino);
+    will-change: transform;
+
+    .svg-icon {
+      transition: all 0.2s var(--anim-motion-cupertino);
+    }
+  }
+
+  .callout:hover .callout-icon {
+    transform: scale(1.1);
+
+    .svg-icon {
+      filter: drop-shadow(0 1px 3px rgba(var(--callout-color), 0.4));
+    }
+  }
+
+  // Foldable callout animations
+  .callout.is-collapsible {
+    .callout-title {
+      cursor: pointer;
+
+      &:hover {
+        background-color: rgba(var(--callout-color), 0.08);
+      }
+    }
+
+    &.is-collapsed .callout-icon {
+      transform: rotate(-90deg);
+    }
+  }
+
+  .callout.is-collapsible:not(.is-collapsed):hover .callout-icon {
+    transform: scale(1.1) rotate(0deg);
+  }
+
+  // Content animation
+  .callout-content {
+    transition: all 0.3s var(--anim-motion-cupertino);
+  }
+
+  .callout.is-collapsed .callout-content {
+    animation: none;
+  }
+
+  // Type-specific enhancements
+  .callout[data-callout="note"],
+  .callout[data-callout="info"] {
+    &::before {
+      background: linear-gradient(135deg,
+        rgba(var(--color-blue-rgb), 0.08) 0%,
+        transparent 50%,
+        rgba(var(--color-blue-rgb), 0.02) 100%);
+    }
+  }
+
+  .callout[data-callout="tip"],
+  .callout[data-callout="success"] {
+    &::before {
+      background: linear-gradient(135deg,
+        rgba(var(--color-green-rgb), 0.08) 0%,
+        transparent 50%,
+        rgba(var(--color-green-rgb), 0.02) 100%);
+    }
+  }
+
+  .callout[data-callout="warning"],
+  .callout[data-callout="caution"] {
+    &::before {
+      background: linear-gradient(135deg,
+        rgba(var(--color-orange-rgb), 0.08) 0%,
+        transparent 50%,
+        rgba(var(--color-orange-rgb), 0.02) 100%);
+    }
+  }
+
+  .callout[data-callout="danger"],
+  .callout[data-callout="error"] {
+    &::before {
+      background: linear-gradient(135deg,
+        rgba(var(--color-red-rgb), 0.08) 0%,
+        transparent 50%,
+        rgba(var(--color-red-rgb), 0.02) 100%);
+    }
+  }
+}
+
+// Theme-specific adjustments
+body.theme-dark:not(.is-mobile) {
+  .callout {
+    &::before {
+      opacity: 0.4;
+    }
+
+    &:hover::before {
+      opacity: 0.7;
+    }
+
+    &:hover {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+  }
+}

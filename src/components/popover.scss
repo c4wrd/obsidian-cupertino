@@ -1,6 +1,33 @@
 .popover {
-  backdrop-filter: var(--blur-l);
+  backdrop-filter: var(--blur-progressive-l);
   animation: var(--anim-duration-fast) fadeInScale;
   border-radius: var(--radius-l);
   background-color: var(--workspace-background-translucent);
+  box-shadow: var(--shadow-glass);
+  position: relative;
+  will-change: transform, opacity;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-l);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 50%, rgba(0, 0, 0, 0.04) 100%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius-l);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+  }
+}
+
+body.theme-dark .popover {
+  &::before {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%);
+  }
 }
