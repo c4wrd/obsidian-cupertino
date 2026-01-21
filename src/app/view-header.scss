@@ -1,10 +1,15 @@
 // Liquid Glass view header enhancements
 body:not(.is-mobile) {
+  // Non-markdown view-headers use position:relative
+  // Markdown views use position:sticky (set in editor.scss) for the blur effect
+  .workspace-leaf-content:not([data-type="markdown"]) .view-header {
+    position: relative;
+  }
+
   .view-header {
     backdrop-filter: var(--blur-progressive-m);
     background-color: rgba(var(--mono-rgb-0), 0.75);
     transition: all 0.2s ease-in-out;
-    position: relative;
     will-change: backdrop-filter, box-shadow;
 
     &::before {

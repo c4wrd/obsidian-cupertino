@@ -1582,11 +1582,14 @@ body.is-tablet .workspace-tab-header-container-inner {
   body:not(.is-mobile) .mod-root .workspace-tabs:not(:only-of-type) .workspace-tab-container {
     box-shadow: none;
   }
-  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .view-header,
-  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .markdown-source-view .document-search-container {
-    background-color: transparent;
+  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] {
+    position: relative;
+  }
+  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .view-header {
     position: absolute;
     inset: 0 0 auto;
+    z-index: 10;
+    background-color: transparent;
   }
   body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .view-header::before {
     position: absolute;
@@ -1602,9 +1605,9 @@ body.is-tablet .workspace-tab-header-container-inner {
     margin: 0;
     background-color: var(--background-primary) !important;
   }
-  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .view-content > .markdown-reading-view > div:first-child:not(.document-search-container),
-  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .view-content > .markdown-source-view > .cm-editor > .cm-scroller {
-    padding-top: calc(var(--file-margins) + var(--view-header-height)) !important;
+  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .cm-sizer > .inline-title,
+  body:not(.is-mobile) .mod-root .workspace-leaf-content[data-type=markdown] .markdown-preview-sizer > .inline-title {
+    padding-top: var(--header-height);
   }
   body:not(.is-mobile):not(.show-ribbon) .workspace:not(.is-left-sidedock-open) .mod-root .workspace-tab-container {
     border-radius: var(--radius-window);
@@ -2825,11 +2828,13 @@ body:not(.is-mobile):not(.mod-windows:not(.windows-mode-off)):not(.sidedock-glas
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 2px rgba(0, 0, 0, 0.4);
 }
 
+body:not(.is-mobile) .workspace-leaf-content:not([data-type=markdown]) .view-header {
+  position: relative;
+}
 body:not(.is-mobile) .view-header {
   backdrop-filter: var(--blur-progressive-m);
   background-color: rgba(var(--mono-rgb-0), 0.75);
   transition: all 0.2s ease-in-out;
-  position: relative;
   will-change: backdrop-filter, box-shadow;
 }
 body:not(.is-mobile) .view-header::before {

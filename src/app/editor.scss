@@ -579,11 +579,13 @@
       }
 
       .workspace-leaf-content[data-type="markdown"] {
-        .view-header,
-        .markdown-source-view .document-search-container {
-          background-color: transparent;
+        position: relative;
+
+        .view-header {
           position: absolute;
           inset: 0 0 auto;
+          z-index: 10;
+          background-color: transparent;
         }
 
         .view-header::before {
@@ -602,10 +604,11 @@
           background-color: var(--background-primary) !important;
         }
 
-        // Content pusher
-        .view-content > .markdown-reading-view > div:first-child:not(.document-search-container),
-        .view-content > .markdown-source-view > .cm-editor > .cm-scroller {
-          padding-top: calc(var(--file-margins) + var(--view-header-height)) !important;
+        // The inline-title needs padding to appear below the header
+        // but the content should still be able to scroll behind the header for blur effect
+        .cm-sizer > .inline-title,
+        .markdown-preview-sizer > .inline-title {
+          padding-top: var(--header-height);
         }
       }
     }
